@@ -3,15 +3,16 @@ import { View } from "react-native";
 import { Text } from "react-native";
 
 import { Button, ButtonText, Form, Input } from "tamagui";
+import { SignInPayload } from "../../../store/user.store";
 
 type Inputs = {
   username: string;
   password: string;
 };
 
-const SignInForm: React.FC = () => {
-  const onSubmit = (data) => console.log(data);
-
+const SignInForm: React.FC<{
+  onSubmit: (payload: SignInPayload) => void;
+}> = ({ onSubmit }) => {
   const {
     control,
     handleSubmit,
@@ -24,7 +25,7 @@ const SignInForm: React.FC = () => {
   });
 
   return (
-    <View>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <View style={{ height: 200 }}></View>
       <Controller
         control={control}
@@ -33,6 +34,8 @@ const SignInForm: React.FC = () => {
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            autoCapitalize="none"
+            textContentType="username"
             placeholder="First name"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -46,14 +49,12 @@ const SignInForm: React.FC = () => {
       <Controller
         control={control}
         rules={{
-          minLength: 8,
-
           maxLength: 100,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
             secureTextEntry={true}
-            passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+            //passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
             textContentType="password"
             placeholder="password"
             onBlur={onBlur}
@@ -63,9 +64,11 @@ const SignInForm: React.FC = () => {
         )}
         name="password"
       />
-
-      <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
-    </View>
+      {errors.password && <Text>{errors.password.message}</Text>}
+      <Form.Trigger asChild>
+        <Button>Submit</Button>
+      </Form.Trigger>
+    </Form>
   );
 };
 
