@@ -7,16 +7,16 @@ type User = {
   avatar: string;
 };
 
+export type SignInPayload = {
+  username: string;
+  password: string;
+};
+
 export type State = {
   jwt?: string;
   user?: User;
   loading: boolean;
   error?: string;
-};
-
-export type SignInPayload = {
-  username: string;
-  password: string;
 };
 
 type Actions = {
@@ -36,7 +36,7 @@ const useUserStore = create(
       });
 
       if (!res.ok) {
-        return set({ jwt: undefined, loading: undefined });
+        return set({ jwt: undefined, loading: undefined, error: "totot" });
       }
       const { access_token } = await res.json();
       return set({ jwt: access_token, loading: false });

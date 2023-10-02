@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Text } from "react-native";
 
 import { Button, ButtonText, Form, Input } from "tamagui";
-import { SignInPayload } from "../../../store/user.store";
+import { SignInPayload } from "../auth.store";
 
 type Inputs = {
   username: string;

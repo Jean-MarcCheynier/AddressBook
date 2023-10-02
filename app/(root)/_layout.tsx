@@ -27,6 +27,7 @@ export default function HomeLayout() {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
+          header: () => <></>,
           tabBarActiveTintColor: "tomato",
           tabBarInactiveTintColor: "gray",
         })}

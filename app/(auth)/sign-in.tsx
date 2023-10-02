@@ -1,6 +1,6 @@
 import { XStack, YStack } from "tamagui";
-import SignInForm from "../features/auth/signin/sign-in.form";
-import useUserStore from "../store/user.store";
+import SignInForm from "../../features/auth/signin/sign-in.form";
+import useUserStore from "../../features/auth/auth.store";
 
 export default function SignIn() {
   const signIn = useUserStore((state) => state.signIn);
