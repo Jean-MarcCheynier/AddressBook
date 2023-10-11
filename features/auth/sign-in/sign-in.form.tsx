@@ -1,18 +1,18 @@
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { View } from "react-native";
-import { Text } from "react-native";
+import { useShallow } from "zustand/react/shallow";
+import { View, Text } from "react-native";
 
-import { Button, ButtonText, Form, Input } from "tamagui";
-import { SignInPayload } from "../auth.store";
+import { Button, ButtonText, Form, Input, XStack } from "tamagui";
+import { SignInPayload } from "./sign-in.fetch";
+import useUserStore from "../auth.store";
 
 type Inputs = {
   username: string;
   password: string;
 };
 
-const SignInForm: React.FC<{
-  onSubmit: (payload: SignInPayload) => void;
-}> = ({ onSubmit }) => {
+const SignInForm: React.FC = () => {
+  const signIn = useUserStore(useShallow((state) => state.signIn));
   const {
     control,
     handleSubmit,
@@ -25,8 +25,7 @@ const SignInForm: React.FC<{
   });
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <View style={{ height: 200 }}></View>
+    <Form onSubmit={handleSubmit(signIn)}>
       <Controller
         control={control}
         rules={{
@@ -34,6 +33,7 @@ const SignInForm: React.FC<{
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            space="$size.9"
             autoCapitalize="none"
             textContentType="username"
             placeholder="First name"
@@ -66,7 +66,7 @@ const SignInForm: React.FC<{
       />
       {errors.password && <Text>{errors.password.message}</Text>}
       <Form.Trigger asChild>
-        <Button>Submit</Button>
+        <Button theme="active">Submit</Button>
       </Form.Trigger>
     </Form>
   );

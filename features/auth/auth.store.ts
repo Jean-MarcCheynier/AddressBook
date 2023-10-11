@@ -1,15 +1,12 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import signIn, { SignInPayload } from "./sign-in/sign-in.fetch";
+import signUp, { SignUpPayload } from "./sign-up/sign-up.fetch";
 
 type User = {
   firstName: string;
   lastName: string;
   avatar: string;
-};
-
-export type SignInPayload = {
-  username: string;
-  password: string;
 };
 
 export type State = {
@@ -21,25 +18,39 @@ export type State = {
 
 type Actions = {
   signIn: (payload: SignInPayload) => void;
+  signUp: (payload: SignUpPayload) => void;
   signOut: () => void;
 };
 
 const useUserStore = create(
   immer<State & Actions>((set) => ({
     loading: false,
-    signIn: async (payload: SignInPayload) => {
+    jwt: undefined,
+    signIn: async (payload) => {
       set({ loading: true });
-      const res = await fetch("http://localhost:3000/auth/signin", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!res.ok) {
-        return set({ jwt: undefined, loading: undefined, error: "totot" });
+      try {
+        const { access_token } = await signIn(payload);
+        return set({ jwt: access_token, loading: false });
+      } catch (error) {
+        return set({
+          jwt: undefined,
+          loading: undefined,
+          error: JSON.stringify(error),
+        });
       }
-      const { access_token } = await res.json();
-      return set({ jwt: access_token, loading: false });
+    },
+    signUp: async (payload) => {
+      set({ loading: true, jwt: undefined });
+      try {
+        await signUp(payload);
+        return set({ loading: false });
+      } catch (error) {
+        return set({
+          jwt: undefined,
+          loading: undefined,
+          error: JSON.stringify(error),
+        });
+      }
     },
     signOut: () => set({ jwt: undefined }),
   }))

@@ -12,5 +12,5 @@ const config = getDefaultConfig(__dirname, {
 
 // https://github.com/expo/expo/issues/23180
 
-config.resolver.sourceExts.push("mjs");
+//config.resolver.sourceExts.push("mjs");
 module.exports = config;
