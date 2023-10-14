@@ -1,28 +1,22 @@
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
-import { View, Text } from "react-native";
+import { Text } from "react-native";
 
 import { Button, Form, Input, useTheme } from "tamagui";
 import useUserStore from "../auth.store";
-
-type Inputs = {
-  username: string;
-  password: string;
-  passwordConfirmation: string;
-};
+import { SignUpPayload } from "./sign-up.fetch";
 
 const SignUpForm: React.FC = () => {
   const signUp = useUserStore(useShallow((state) => state.signUp));
-  const { red3 } = useTheme();
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<SignUpPayload>({
     defaultValues: {
       username: "",
       password: "",
-      passwordConfirmation: "",
+      passwordRepeat: "",
     },
   });
 
@@ -84,7 +78,7 @@ const SignUpForm: React.FC = () => {
             value={value}
           />
         )}
-        name="passwordConfirmation"
+        name="passwordRepeat"
       />
       {errors.password && <Text>{errors.password.message}</Text>}
       <Form.Trigger asChild>

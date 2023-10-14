@@ -6,18 +6,13 @@ import { Button, ButtonText, Form, Input, XStack } from "tamagui";
 import { SignInPayload } from "./sign-in.fetch";
 import useUserStore from "../auth.store";
 
-type Inputs = {
-  username: string;
-  password: string;
-};
-
 const SignInForm: React.FC = () => {
   const signIn = useUserStore(useShallow((state) => state.signIn));
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<SignInPayload>({
     defaultValues: {
       username: "",
       password: "",

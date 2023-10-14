@@ -1,6 +1,7 @@
 export type SignUpPayload = {
   username: string;
   password: string;
+  passwordRepeat: string;
 };
 
 export type SignUpResponse = { access_token: string };
