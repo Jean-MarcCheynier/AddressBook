@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import jwt_decode from "jwt-decode";
 import signIn, { SignInPayload } from "./sign-in/sign-in.fetch";
 import signUp, { SignUpPayload } from "./sign-up/sign-up.fetch";
+import jwtDecode from "jwt-decode";
 
 type User = {
   firstName: string;
@@ -29,8 +31,9 @@ const useUserStore = create(
     signIn: async (payload) => {
       set({ loading: true });
       try {
-        const { access_token } = await signIn(payload);
-        return set({ jwt: access_token, loading: false });
+        const { access_token: jwt } = await signIn(payload);
+        const user: User = jwtDecode(jwt);
+        return set({ jwt, user, loading: false });
       } catch (error) {
         return set({
           jwt: undefined,
@@ -47,12 +50,13 @@ const useUserStore = create(
       } catch (error) {
         return set({
           jwt: undefined,
+          user: undefined,
           loading: undefined,
           error: JSON.stringify(error),
         });
       }
     },
-    signOut: () => set({ jwt: undefined }),
+    signOut: () => set({ jwt: undefined, user: undefined }),
   }))
 );
 

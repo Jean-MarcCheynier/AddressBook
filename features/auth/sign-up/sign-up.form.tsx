@@ -2,7 +2,7 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useShallow } from "zustand/react/shallow";
 import { View, Text } from "react-native";
 
-import { Button, Form, Input } from "tamagui";
+import { Button, Form, Input, useTheme } from "tamagui";
 import useUserStore from "../auth.store";
 
 type Inputs = {
@@ -13,6 +13,7 @@ type Inputs = {
 
 const SignUpForm: React.FC = () => {
   const signUp = useUserStore(useShallow((state) => state.signUp));
+  const { red3 } = useTheme();
   const {
     control,
     handleSubmit,
@@ -30,13 +31,16 @@ const SignUpForm: React.FC = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: "This is required",
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            placeholderTextColor={errors.username && "$red10"}
+            borderColor={errors.username && "$red7"}
+            backgroundColor={errors.username && "$red2"}
             autoCapitalize="none"
             textContentType="username"
-            placeholder="First name"
+            placeholder={`First name ${!!errors.username ? "is required" : ""}`}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
@@ -44,7 +48,6 @@ const SignUpForm: React.FC = () => {
         )}
         name="username"
       />
-      {errors.username && <Text>This is required.</Text>}
 
       <Controller
         control={control}
