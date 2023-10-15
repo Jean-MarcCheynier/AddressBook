@@ -1,9 +1,11 @@
 import { Slot } from "expo-router";
-import { Provider } from "../context/auth/auth";
+import Provider from "../context/auth/auth";
 import { TamaguiProvider } from "tamagui";
 import config from "../tamagui.config";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import useUserStore from "../features/auth/auth.store";
+import useProtectedRoute from "../hooks/useProtectedRoute";
 
 export const unstable_settings = {
   // Ensure any route can link back to `/`

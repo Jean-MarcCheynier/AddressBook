@@ -1,22 +1,18 @@
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { View } from "react-native";
-import { Text } from "react-native";
+import { useShallow } from "zustand/react/shallow";
+import { View, Text } from "react-native";
 
-import { Button, ButtonText, Form, Input } from "tamagui";
-
-type Inputs = {
-  username: string;
-  password: string;
-};
+import { Button, ButtonText, Form, Input, XStack } from "tamagui";
+import { SignInPayload } from "./sign-in.fetch";
+import useUserStore from "../auth.store";
 
 const SignInForm: React.FC = () => {
-  const onSubmit = (data) => console.log(data);
-
+  const signIn = useUserStore(useShallow((state) => state.signIn));
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<SignInPayload>({
     defaultValues: {
       username: "",
       password: "",
@@ -24,8 +20,7 @@ const SignInForm: React.FC = () => {
   });
 
   return (
-    <View>
-      <View style={{ height: 200 }}></View>
+    <Form onSubmit={handleSubmit(signIn)}>
       <Controller
         control={control}
         rules={{
@@ -33,6 +28,9 @@ const SignInForm: React.FC = () => {
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
+            space="$size.9"
+            autoCapitalize="none"
+            textContentType="username"
             placeholder="First name"
             onBlur={onBlur}
             onChangeText={onChange}
@@ -46,14 +44,12 @@ const SignInForm: React.FC = () => {
       <Controller
         control={control}
         rules={{
-          minLength: 8,
-
           maxLength: 100,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
             secureTextEntry={true}
-            passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+            //passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
             textContentType="password"
             placeholder="password"
             onBlur={onBlur}
@@ -63,9 +59,11 @@ const SignInForm: React.FC = () => {
         )}
         name="password"
       />
-
-      <Button onPress={handleSubmit(onSubmit)}>Submit</Button>
-    </View>
+      {errors.password && <Text>{errors.password.message}</Text>}
+      <Form.Trigger asChild>
+        <Button theme="active">Submit</Button>
+      </Form.Trigger>
+    </Form>
   );
 };
 
