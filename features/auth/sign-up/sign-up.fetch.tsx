@@ -7,7 +7,7 @@ export type SignUpPayload = {
 export type SignUpResponse = { access_token: string };
 
 const signUp = async (
-  payload: SignUpPayload
+  payload: SignUpPayload,
 ): Promise<SignUpResponse> | never => {
   try {
     const response = await fetch("http://localhost:3000/auth/signup", {

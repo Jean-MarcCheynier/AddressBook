@@ -6,7 +6,7 @@ export type SignInPayload = {
 export type SignInResponse = { access_token: string };
 
 const signIn = async (
-  payload: SignInPayload
+  payload: SignInPayload,
 ): Promise<SignInResponse> | never => {
   try {
     const response = await fetch("http://localhost:3000/auth/signin", {

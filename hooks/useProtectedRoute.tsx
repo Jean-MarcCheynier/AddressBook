@@ -1,12 +1,13 @@
 import { useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
-import useUserStore from "../features/auth/auth.store";
+
+import useSignInStore from "../features/auth/sign-in/sign-in.store";
 
 // This hook will protect the route access based on user authentication.
 const useProtectedRoute = () => {
   const segments = useSegments();
   const router = useRouter();
-  const user = useUserStore((state) => state.user);
+  const user = useSignInStore((state) => state.user);
 
   useEffect(() => {
     const inAuthGroup = segments[0] === "(auth)";
@@ -22,7 +23,7 @@ const useProtectedRoute = () => {
       // Redirect away from the sign-in page.
       router.replace("/home");
     }
-  }, [user, segments]);
+  }, [user, segments, router]);
 };
 
 export default useProtectedRoute;
