@@ -1,13 +1,13 @@
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import { Text } from "react-native";
+import { Button, Form, Input } from "tamagui";
 import { useShallow } from "zustand/react/shallow";
-import { View, Text } from "react-native";
 
-import { Button, ButtonText, Form, Input, XStack } from "tamagui";
 import { SignInPayload } from "./sign-in.fetch";
-import useUserStore from "../auth.store";
+import useSignInStore from "./sign-in.store";
 
 const SignInForm: React.FC = () => {
-  const signIn = useUserStore(useShallow((state) => state.signIn));
+  const signIn = useSignInStore(useShallow((state) => state.signIn));
   const {
     control,
     handleSubmit,

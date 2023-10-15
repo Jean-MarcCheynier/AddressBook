@@ -1,16 +1,13 @@
-import { Button, XStack, YStack, useTheme } from "tamagui";
-import SignUpForm from "../../features/auth/sign-up/sign-up.form";
 import { useRouter } from "expo-router";
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Button, XStack, YStack } from "tamagui";
+
+import SignUpForm from "../../features/auth/sign-up/sign-up.form";
 
 const SignUp = () => {
   const router = useRouter();
   const handleOnPress = () => router.push("/sign-in");
+
   return (
     <XStack fullscreen={true} space>
       <YStack opacity={1} fullscreen={true} bg={"$blue4"} padding="$2">

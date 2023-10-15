@@ -1,13 +1,24 @@
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import { useShallow } from "zustand/react/shallow";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { Text } from "react-native";
+import { Button, Form, Input } from "tamagui";
 
-import { Button, Form, Input, useTheme } from "tamagui";
-import useUserStore from "../auth.store";
 import { SignUpPayload } from "./sign-up.fetch";
+import useSignUpStore from "./sign-up.store";
 
 const SignUpForm: React.FC = () => {
-  const signUp = useUserStore(useShallow((state) => state.signUp));
+  const { push } = useRouter();
+  const [signUp, success] = useSignUpStore((state) => [
+    state.signUp,
+    state.success,
+  ]);
+  useEffect(() => {
+    if (success) {
+      push("/sign-in");
+    }
+  }, [success, push]);
+
   const {
     control,
     handleSubmit,
@@ -34,7 +45,7 @@ const SignUpForm: React.FC = () => {
             backgroundColor={errors.username && "$red2"}
             autoCapitalize="none"
             textContentType="username"
-            placeholder={`First name ${!!errors.username ? "is required" : ""}`}
+            placeholder={`First name ${errors.username ? "is required" : ""}`}
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}

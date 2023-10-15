@@ -1,9 +1,8 @@
+import jwtDecode from "jwt-decode";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import jwt_decode from "jwt-decode";
-import signIn, { SignInPayload } from "./sign-in/sign-in.fetch";
-import signUp, { SignUpPayload } from "./sign-up/sign-up.fetch";
-import jwtDecode from "jwt-decode";
+
+import signIn, { SignInPayload } from "./sign-in.fetch";
 
 type User = {
   firstName: string;
@@ -20,11 +19,10 @@ export type State = {
 
 type Actions = {
   signIn: (payload: SignInPayload) => void;
-  signUp: (payload: SignUpPayload) => void;
   signOut: () => void;
 };
 
-const useUserStore = create(
+const useSignInStore = create(
   immer<State & Actions>((set) => ({
     loading: false,
     jwt: undefined,
@@ -42,22 +40,8 @@ const useUserStore = create(
         });
       }
     },
-    signUp: async (payload) => {
-      set({ loading: true, jwt: undefined });
-      try {
-        await signUp(payload);
-        return set({ loading: false });
-      } catch (error) {
-        return set({
-          jwt: undefined,
-          user: undefined,
-          loading: undefined,
-          error: JSON.stringify(error),
-        });
-      }
-    },
     signOut: () => set({ jwt: undefined, user: undefined }),
-  }))
+  })),
 );
 
-export default useUserStore;
+export default useSignInStore;

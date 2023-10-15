@@ -1,13 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Slot,
-  Tabs,
-  useNavigation,
-  useRootNavigation,
-  useRootNavigationState,
-  useRouter,
-} from "expo-router";
-import { Text, View } from "react-native";
+import { Tabs } from "expo-router";
 
 export default function HomeLayout() {
   return (
@@ -15,7 +7,7 @@ export default function HomeLayout() {
       <Tabs
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+            let iconName = "key";
 
             if (route.name === "home") {
               iconName = focused
