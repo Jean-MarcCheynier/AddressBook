@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { TamaguiProvider } from "tamagui";
 
 import Provider from "../context/auth/auth";
+import "../lang/i18n";
 import config from "../tamagui.config";
 
 export const unstable_settings = {

@@ -1,16 +1,25 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import signUp, { SignUpPayload } from "../sign-up/sign-up.fetch";
+import signUp, {
+  BadRequestServerError,
+  SignUpPayload,
+} from "../sign-up/sign-up.fetch";
 
 export type State = {
   success: boolean;
   loading: boolean;
-  error?: string;
+  error?: ServerErrorResponse;
+};
+
+export type ServerErrorResponse = {
+  error: string;
+  statusCode: number;
+  message: { field: string; error: { [key: string]: string } }[];
 };
 
 type Actions = {
-  signUp: (payload: SignUpPayload) => void;
+  signUp: (payload: SignUpPayload) => Promise<void>;
 };
 
 const useSignUpStore = create(
@@ -22,11 +31,20 @@ const useSignUpStore = create(
       try {
         await signUp(payload);
         set({ loading: false, success: true });
-      } catch (error) {
-        return set({
+      } catch (error: unknown) {
+        let errorContent: ServerErrorResponse | undefined;
+        if (error instanceof BadRequestServerError) {
+          console.error("BadRequestServerError");
+          errorContent = {
+            message: error.response.message,
+            error: error.response.error,
+            statusCode: error.response.statusCode,
+          };
+        }
+        set({
           success: false,
-          loading: undefined,
-          error: JSON.stringify(error),
+          loading: false,
+          error: errorContent,
         });
       }
     },

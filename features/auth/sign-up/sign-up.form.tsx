@@ -9,9 +9,10 @@ import useSignUpStore from "./sign-up.store";
 
 const SignUpForm: React.FC = () => {
   const { push } = useRouter();
-  const [signUp, success] = useSignUpStore((state) => [
+  const [signUp, success, serverError] = useSignUpStore((state) => [
     state.signUp,
     state.success,
+    state.error,
   ]);
   useEffect(() => {
     if (success) {
@@ -22,6 +23,7 @@ const SignUpForm: React.FC = () => {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<SignUpPayload>({
     defaultValues: {
@@ -30,6 +32,24 @@ const SignUpForm: React.FC = () => {
       passwordRepeat: "",
     },
   });
+
+  useEffect(() => {
+    if (serverError) {
+      console.log("Serveur error effect");
+      serverError.message.map((error) => {
+        const entries = Object.entries(error.error);
+        console.log(error.field);
+        console.log({
+          type: serverError.statusCode.toString(),
+          message: entries[0][0],
+        });
+        setError(error.field as any, {
+          type: serverError.statusCode.toString(),
+          message: entries[0][0],
+        });
+      });
+    }
+  }, [serverError, setError]);
 
   return (
     <Form onSubmit={handleSubmit(signUp)}>

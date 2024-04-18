@@ -26,7 +26,12 @@ const SignInForm: React.FC = () => {
         rules={{
           required: true,
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
+        render={({
+          field: { onChange, onBlur, value },
+          formState: {
+            errors: { username: usernameError },
+          },
+        }) => (
           <Input
             space="$size.9"
             autoCapitalize="none"
@@ -34,6 +39,7 @@ const SignInForm: React.FC = () => {
             placeholder="First name"
             onBlur={onBlur}
             onChangeText={onChange}
+            bg={usernameError ? "$red3" : "$red6"}
             value={value}
           />
         )}
