@@ -1,0 +1,47 @@
+{
+  "translation": {
+    "test_one": "this is french",
+    "test_plural": "this is french plural",
+    "signUp": {
+      "submit": "Signup",
+      "gotoSignIn": "Already have an account? Singin!",
+      "username": {
+        "placeholder": "Username",
+        "error": {
+          "required": "Required"
+        }
+      },
+      "password": {
+        "placeholder": "Password",
+        "error": {
+          "required": "Required",
+          "isStrongPassword": "Password should contain a least 8 char"
+        }
+      },
+
+      "passwordRepeat": {
+        "placeholder": "Confirm you password",
+        "error": {
+          "notIdentical": "Password and confirmation should match",
+          "required": "Confirmation required"
+        }
+      }
+    },
+    "signIn": {
+      "submit": "Log me in",
+      "gotoSignUp": "Not yet registered? Sign in!",
+      "username": {
+        "placeholder": "Username",
+        "error": {
+          "required": "Required"
+        }
+      },
+      "password": {
+        "placeholder": "Password",
+        "error": {
+          "required": "Required"
+        }
+      }
+    }
+  }
+}

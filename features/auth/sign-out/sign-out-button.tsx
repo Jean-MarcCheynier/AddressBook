@@ -1,6 +1,6 @@
-import { Button } from "tamagui";
+import { Button } from 'tamagui';
 
-import useSignInStore from "../sign-in/sign-in.store";
+import useSignInStore from '../sign-in/sign-in.store';
 
 const SingOutButton = () => {
   const signOut = useSignInStore((state) => state.signOut);

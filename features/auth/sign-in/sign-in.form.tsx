@@ -1,10 +1,11 @@
-import { useForm, Controller } from "react-hook-form";
-import { Text } from "react-native";
-import { Button, Form, Input } from "tamagui";
-import { useShallow } from "zustand/react/shallow";
+import { useForm, Controller } from 'react-hook-form';
+import { Text } from 'react-native';
+import { Button, Form, Input } from 'tamagui';
+import { useShallow } from 'zustand/react/shallow';
 
-import { SignInPayload } from "./sign-in.fetch";
-import useSignInStore from "./sign-in.store";
+import { SignInPayload } from './sign-in.fetch';
+import useSignInStore from './sign-in.store';
+import { AuthInput } from '../components/Input';
 
 const SignInForm: React.FC = () => {
   const signIn = useSignInStore(useShallow((state) => state.signIn));
@@ -14,8 +15,8 @@ const SignInForm: React.FC = () => {
     formState: { errors },
   } = useForm<SignInPayload>({
     defaultValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
   });
 
@@ -24,42 +25,35 @@ const SignInForm: React.FC = () => {
       <Controller
         control={control}
         rules={{
-          required: true,
+          required: 'required',
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            space="$size.9"
-            autoCapitalize="none"
+        render={(renderProps) => (
+          <AuthInput
+            formName="signIn"
             textContentType="username"
-            placeholder="First name"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            autoCapitalize={'none'}
+            {...renderProps}
           />
         )}
         name="username"
       />
-      {errors.username && <Text>This is required.</Text>}
 
       <Controller
         control={control}
         rules={{
-          maxLength: 100,
+          required: 'required',
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            secureTextEntry={true}
-            //passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+        render={(renderProps) => (
+          <AuthInput
+            formName={'signIn'}
             textContentType="password"
-            placeholder="password"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            secureTextEntry={true}
+            {...renderProps}
           />
         )}
         name="password"
       />
-      {errors.password && <Text>{errors.password.message}</Text>}
+
       <Form.Trigger asChild>
         <Button theme="active">Submit</Button>
       </Form.Trigger>

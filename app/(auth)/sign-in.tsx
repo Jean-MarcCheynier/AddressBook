@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, XStack, YStack } from "tamagui";
 
 import SignInForm from "../../features/auth/sign-in/sign-in.form";
@@ -9,23 +10,18 @@ export default function SignIn() {
     router.push("/sign-up");
   };
   return (
-    <XStack fullscreen={true} space alignSelf="center" alignContent="center">
-      <YStack
-        alignContent="center"
-        gap={5}
-        style={{ paddingHorizontal: 10 }}
-        opacity={0.5}
-        fullscreen={true}
-        bg={"$blue4"}
-      >
-        <YStack>
-          <SignInForm />
-        </YStack>
-        <YStack>
-          <Button onPress={handleOnPress} variant="outlined">
-            Sign Up!
-          </Button>
-        </YStack>
+    <XStack fullscreen={true} space>
+      <YStack opacity={1} fullscreen={true} bg={"$blue4"} padding="$2">
+        <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+          <YStack>
+            <SignInForm />
+          </YStack>
+          <YStack>
+            <Button variant="outlined" onPress={handleOnPress}>
+              Sign Up!
+            </Button>
+          </YStack>
+        </SafeAreaView>
       </YStack>
     </XStack>
   );
