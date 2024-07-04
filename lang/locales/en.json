@@ -1,7 +1,21 @@
 {
+  "translation": {
+    "test_one": "this is english",
+    "test_other": "this is english plural",
+    "signUp": {
+      "username": {
+        "placeholder": "Nom d'utilisateur",
+        "error": "Entrez un nom d'utilisateur valid"
+      },
+      "password": {
+        "placeholder": "Password",
 
-    "translation": {
-        "test": "this is english"
-
+        "error": "Password"
+      },
+      "passwordRepeat": {
+        "placeholder": "Confirm you password",
+        "error": "Confirm your password"
+      }
     }
+  }
 }

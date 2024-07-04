@@ -20,17 +20,17 @@ const signUp = async (
   payload: SignUpPayload,
 ): Promise<SignUpResponse> | never => {
   try {
-    const response = await fetch("http://localhost:3000/auth/signup", {
-      method: "POST",
+    const response = await fetch('http://localhost:3000/auth/signup', {
+      method: 'POST',
       body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
     if (!response.ok) {
       switch (response.status) {
         case 400:
-          throw new BadRequestServerError("Bad request", await response.json());
+          throw new BadRequestServerError('Bad request', await response.json());
         default:
-          throw new ServerError("Network response was not OK");
+          throw new ServerError('Network response was not OK');
       }
     }
     return await response.json();
@@ -41,7 +41,7 @@ const signUp = async (
     if (error instanceof ServerError) {
       throw error;
     }
-    console.error("Fetch could not be done");
+    console.error('Fetch could not be done');
     throw error;
   }
 };

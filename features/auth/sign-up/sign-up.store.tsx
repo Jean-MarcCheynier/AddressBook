@@ -1,10 +1,10 @@
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
 
 import signUp, {
   BadRequestServerError,
   SignUpPayload,
-} from "../sign-up/sign-up.fetch";
+} from '../sign-up/sign-up.fetch';
 
 export type State = {
   success: boolean;
@@ -20,6 +20,7 @@ export type ServerErrorResponse = {
 
 type Actions = {
   signUp: (payload: SignUpPayload) => Promise<void>;
+  reset: () => void;
 };
 
 const useSignUpStore = create(
@@ -34,7 +35,7 @@ const useSignUpStore = create(
       } catch (error: unknown) {
         let errorContent: ServerErrorResponse | undefined;
         if (error instanceof BadRequestServerError) {
-          console.error("BadRequestServerError");
+          console.error('BadRequestServerError');
           errorContent = {
             message: error.response.message,
             error: error.response.error,
@@ -47,6 +48,9 @@ const useSignUpStore = create(
           error: errorContent,
         });
       }
+    },
+    reset: () => {
+      set({ loading: true, success: false });
     },
   })),
 );

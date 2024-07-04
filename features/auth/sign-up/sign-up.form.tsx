@@ -1,22 +1,26 @@
-import { useRouter } from "expo-router";
-import { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { Text } from "react-native";
-import { Button, Form, Input } from "tamagui";
+import { useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Button, Form, Text } from 'tamagui';
 
-import { SignUpPayload } from "./sign-up.fetch";
-import useSignUpStore from "./sign-up.store";
+import { SignUpPayload } from './sign-up.fetch';
+import useSignUpStore from './sign-up.store';
+import { AuthInput } from '../components/Input';
 
 const SignUpForm: React.FC = () => {
+  const [t] = useTranslation();
   const { push } = useRouter();
-  const [signUp, success, serverError] = useSignUpStore((state) => [
+  const [signUp, success, serverError, reset] = useSignUpStore((state) => [
     state.signUp,
     state.success,
     state.error,
+    state.reset,
   ]);
   useEffect(() => {
     if (success) {
-      push("/sign-in");
+      push('/sign-in');
+      reset();
     }
   }, [success, push]);
 
@@ -27,15 +31,15 @@ const SignUpForm: React.FC = () => {
     formState: { errors },
   } = useForm<SignUpPayload>({
     defaultValues: {
-      username: "",
-      password: "",
-      passwordRepeat: "",
+      username: '',
+      password: '',
+      passwordRepeat: '',
     },
   });
 
   useEffect(() => {
     if (serverError) {
-      console.log("Serveur error effect");
+      console.log('Server error effect');
       serverError.message.map((error) => {
         const entries = Object.entries(error.error);
         console.log(error.field);
@@ -52,23 +56,18 @@ const SignUpForm: React.FC = () => {
   }, [serverError, setError]);
 
   return (
-    <Form onSubmit={handleSubmit(signUp)}>
+    <Form onSubmit={handleSubmit(signUp)} id="signUp">
       <Controller
         control={control}
         rules={{
-          required: "This is required",
+          required: 'required',
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            placeholderTextColor={errors.username && "$red10"}
-            borderColor={errors.username && "$red7"}
-            backgroundColor={errors.username && "$red2"}
-            autoCapitalize="none"
+        render={(renderProps) => (
+          <AuthInput
+            formName="signUp"
+            autoCapitalize={'none'}
             textContentType="username"
-            placeholder={`First name ${errors.username ? "is required" : ""}`}
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            {...renderProps}
           />
         )}
         name="username"
@@ -77,17 +76,23 @@ const SignUpForm: React.FC = () => {
       <Controller
         control={control}
         rules={{
-          maxLength: 100,
+          required: 'required',
+          min: {
+            value: 8,
+            message: 'min-length',
+          },
+          maxLength: {
+            value: 20,
+            message: 'max-length',
+          },
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            secureTextEntry={true}
-            passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+        render={(renderProps) => (
+          <AuthInput
+            formName="signUp"
             textContentType="password"
-            placeholder="password"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+            secureTextEntry={true}
+            {...renderProps}
           />
         )}
         name="password"
@@ -96,24 +101,25 @@ const SignUpForm: React.FC = () => {
       <Controller
         control={control}
         rules={{
-          maxLength: 100,
+          required: 'required',
+          validate: (value, formValues) => {
+            return value === formValues.password || 'notIdentical';
+          },
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            secureTextEntry={true}
-            passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+        render={(renderProps) => (
+          <AuthInput
+            formName={'signUp'}
             textContentType="password"
-            placeholder="password"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            passwordRules="required: upper; required: lower; required: digit; max-consecutive: 2; minlength: 8;"
+            secureTextEntry={true}
+            {...renderProps}
           />
         )}
         name="passwordRepeat"
       />
-      {errors.password && <Text>{errors.password.message}</Text>}
+
       <Form.Trigger asChild>
-        <Button theme="active">Submit</Button>
+        <Button theme="active">{t('signUp.submit')}</Button>
       </Form.Trigger>
     </Form>
   );

@@ -1,9 +1,10 @@
-import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-import { initReactI18next } from "react-i18next";
+import i18n from 'i18next';
+import 'intl-pluralrules';
 
-import enR from "./locales/en.json";
-import frR from "./locales/fr.json";
+import { initReactI18next } from 'react-i18next';
+
+import enR from './locales/en.json';
+import frR from './locales/fr.json';
 
 const resources = {
   en: enR,
@@ -30,8 +31,8 @@ i18n
   // for all options read: https://www.i18next.com/overview/configuration-options
 
   .init({
-    fallbackLng: "fr",
-    debug: true,
+    fallbackLng: 'fr',
+    //debug: true,
     resources,
   });
 
